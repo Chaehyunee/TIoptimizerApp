@@ -139,8 +139,8 @@ mydata  = app.UserData;
 % show the images and keep track of the axes that are generated
 h(1)=app.MRI_UIAxes1; 
 imageData = squeeze(mydata.img(:,mydata.pos(2),:))';
-imagesc(app.MRI_UIAxes1, imageData); 
-colormap(app.MRI_UIAxes1, gray);
+imagesc(app.MRI_UIAxes1, imageDat); 
+colormap(app.UIFigure);
 d(1,:)=[1 3];
 set(app.UIFigure, 'CurrentAxes', app.MRI_UIAxes1);
 if ~isempty(mydata.vecImg)
@@ -153,10 +153,7 @@ if ~isempty(mydata.vecImg)
 end
 
 h(2)=app.MRI_UIAxes2;
-imageData = squeeze(mydata.img(mydata.pos(1),:,:))';
-imagesc(app.MRI_UIAxes2, imageData); 
-colormap(app.MRI_UIAxes2, gray);
-d(2,:)=[2 3];
+imagesc(app.MRI_UIAxes2, squeeze(mydata.img(mydata.pos(1),:,:))'); d(2,:)=[2 3];
 if ~isempty(mydata.vecImg)
     hold on;
     rngx=mydata.pos(1); rngy=1:5:size(mydata.xi,2); rngz=1:5:size(mydata.xi,3);
@@ -166,10 +163,7 @@ if ~isempty(mydata.vecImg)
 end
 
 h(3)=app.MRI_UIAxes3;
-imageData = squeeze(mydata.img(:,:,mydata.pos(3)))';
-imagesc(app.MRI_UIAxes3, imageData); 
-colormap(app.MRI_UIAxes3, gray);
-d(3,:)=[1 2];
+imagesc(app.MRI_UIAxes3, squeeze(mydata.img(:,:,mydata.pos(3)))'); d(3,:)=[1 2];
 if ~isempty(mydata.vecImg)
     hold on;
     rngx=1:5:size(mydata.xi,1); rngy=1:5:size(mydata.xi,2); rngz=mydata.pos(3);
