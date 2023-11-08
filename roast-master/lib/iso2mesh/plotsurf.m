@@ -1,4 +1,4 @@
-function hm=plotsurf(node,face,varargin)
+function hm=plotsurf(app, node,face,varargin)
 %
 % hm=plotsurf(node,face,opt)
 %
@@ -64,7 +64,7 @@ if(nargin>=2)
             end
         end
     end
-    hold on;
+%     hold on; %%어떻게 해야 하나? 이상은 없으니 일단 둘까
 	h=[];
     newlen=length(newsurf);
 
@@ -86,23 +86,25 @@ if(nargin>=2)
     if(size(face,2)==4)
         tag=face(:,4);
 		types=unique(tag);
-        hold on;
+%         hold on;
 		h=[];
 	    for i=1:length(types)
             if(size(node,2)==3)
-                h=[h plotasurf(node,face(tag==types(i),1:3),'facecolor',rand(3,1),varargin{:})];
+                h=[h plotasurf(app, node,face(tag==types(i),1:3),'facecolor',rand(3,1),varargin{:})];
             else
-                h=[h plotasurf(node,face(tag==types(i),1:3),varargin{:})];
+                h=[h plotasurf(app, node,face(tag==types(i),1:3),varargin{:})];
             end
         end
     else
-        h=plotasurf(node,face,varargin{:});
+        h=plotasurf(app, node,face,varargin{:});
     end
   end
 end    
 if(~isempty(h)) 
-  axis equal;
-  if(all(get(gca,'view')==[0 90]))
+    axesHandle = app.T1tap_UIAxes;
+    axis(axesHandle, 'equal');
+    
+  if(isequal(all(axesHandle.View), [0 90]))
       view(3);
   end
 end
@@ -113,7 +115,7 @@ end
 rand ('state',rngstate);
 
 %-------------------------------------------------------------------------
-function hh=plotasurf(node,face,varargin)
+function hh=plotasurf(app, node,face,varargin)
 isoct=isoctavemesh;
 if(size(face,2)<=2)
     h=plotedges(node,face,varargin{:});
@@ -121,14 +123,16 @@ else
   if(size(node,2)==4)
 	if(isoct && ~exist('trisurf','file'))
 	    h=trimesh(face(:,1:3),node(:,1),node(:,2),node(:,3),node(:,4),'edgecolor','k',varargin{:});
-	else
-	    h=trisurf(face(:,1:3),node(:,1),node(:,2),node(:,3),node(:,4),varargin{:});
+    else
+        axesHandle = app.T1tap_UIAxes;
+        h=trisurf(face(:,1:3),node(:,1),node(:,2),node(:,3),node(:,4),varargin{:}, 'Parent', axesHandle);
 	end
   else
 	if(isoct && ~exist('trisurf','file'))
 	    h=trimesh(face(:,1:3),node(:,1),node(:,2),node(:,3),'edgecolor','k',varargin{:});
-	else
-	    h=trisurf(face(:,1:3),node(:,1),node(:,2),node(:,3),varargin{:});
+    else
+        axesHandle = app.T1tap_UIAxes;
+	    h=T1_trisurf(face(:,1:3),node(:,1),node(:,2),node(:,3),varargin{:}, 'Parent', axesHandle);
     end
   end
 end
