@@ -10,7 +10,11 @@ function solveByGetDP(P,current,sigma,indUse,uniTag,LFtag)
 % August 2019 adding lead field
 
 [dirname,baseFilename] = fileparts(P);
+disp('dirname : ' );
+disp(dirname);
+disp(baseFilename);
 if isempty(dirname), dirname = pwd; end
+
 
 load([baseFilename '_' int2str(1) '_usedElecArea.mat'],'area_elecNeeded');
 
@@ -187,7 +191,7 @@ fclose(fid);
 str = computer('arch');
 switch str
     case 'win64'
-        solverPath = 'D:\download\roast-master\roast-master\lib\getdp-3.2.0\bin/getdp';
+        solverPath = [dirname '\roast-master\lib\getdp-3.2.0\bin/getdp' ];
     case 'glnxa64'
         solverPath = 'lib/getdp-3.2.0/bin/getdp';
     case 'maci64'
@@ -199,7 +203,13 @@ end
 % cmd = [fileparts(which(mfilename)) filesep solverPath ' '...
 %     fileparts(which(mfilename)) filesep dirname filesep baseFilename '_' uniTag '.pro -solve EleSta_v -msh '...
 %     fileparts(which(mfilename)) filesep dirname filesep baseFilename '_' uniTag '_ready.msh -pos Map'];
+disp(solverPath);
 cmd = [solverPath ' "' baseFilename '_' uniTag '.pro" -solve EleSta_v -msh "' baseFilename '_' int2str(1) '_ready.msh" -pos Map'];
+% cmd = [solverPath '" '"' baseFilename '_' uniTag ".pro' -solve EleSta_v -msh '" baseFilename '_' int2str(1) "_ready.msh' -pos Map"];
+% cmd = ['"' cmd '"'];
+% cmd = num2str(cmd);
+disp(cmd);
+% disp(type(cmd));
 try
     status = system(cmd);
 catch
